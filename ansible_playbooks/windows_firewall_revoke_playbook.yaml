@@ -1,0 +1,12 @@
+---
+- name: windows_firewall_playbook.yaml
+  hosts: "{{ host_names }}"
+  tasks:
+    - name: revoking isolated hosts
+      win_firewall_rule:
+        name: Blocking all incoming traffic
+        direction: out
+        action: block
+        protocol: any
+        enabled: yes
+        state: absent

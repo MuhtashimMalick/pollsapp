@@ -1,0 +1,10 @@
+---
+- name: ENABLING LINUX HOST
+  hosts: "{{ host_names }}"
+  become: yes
+  gather_facts: false
+  tasks:
+   - name: enabling a user
+     user:
+       name: "{{ user_name }}"
+       expires: -1

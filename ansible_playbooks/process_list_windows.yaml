@@ -1,0 +1,15 @@
+---
+- name: process list of windows host
+  hosts: "{{ host_names }}"
+  gather_facts: false
+  tasks:
+   - name: finding process list
+     win_shell: |
+       $CpuCores = (Get-WMIObject Win32_ComputerSystem).NumberOfLogicalProcessors
+       Get-Process | Sort-Object -Property WS -Descending | Format-Table @{Label = "ProcessID"; Expression = { $_.id } }, ProcessName, @{Label = "Memory(MB)"; Expression = { [math]::round($_.ws / 1mb) } }, @{Label = "CPU(Percentage)"; Expression = { $TotalSec = (New-TimeSpan -Start $_.StartTime).TotalSeconds
+       [Math]::Round( ($_.CPU * 100 / $TotalSec) / $CpuCores, 2) }}
+
+     register: process_list
+   - name: displaying process list
+     debug:
+       msg: "{{ process_list.stdout_lines }}"

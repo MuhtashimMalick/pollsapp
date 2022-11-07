@@ -1,0 +1,13 @@
+---
+- name: DISABLING WINDOWS HOST
+  hosts: "{{ host_names }}"
+  gather_facts: false
+  tasks:
+   - name: disabling a user
+     win_user:
+       name: "{{ user_name }}"
+       account_disabled: yes
+   - name: logging off host
+     win_shell: $sessions = quser | Where-Object {$_ -match "{{ user_name }}"};
+      $sessionIds = ($sessions -split ' +')[2];
+       logoff $sessionIds

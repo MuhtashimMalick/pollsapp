@@ -1,0 +1,13 @@
+---
+- name: SENDING A SLACK NOTIFICATION
+  hosts: localhost
+  gather_facts: false
+  tasks:
+   - name: sending a message on slack
+     slack:
+       token: T035P69GP0E/B036KKV6U80/oMO9SSctztAoocysy6jYc6Yn  #set your own token here
+       msg: "{{ message }}"
+       color: danger
+       channel: "{{ item }}"
+     loop: "{{ channels }}"
+     when: channels is defined

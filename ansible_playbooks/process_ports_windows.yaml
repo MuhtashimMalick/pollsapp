@@ -1,0 +1,11 @@
+---
+- name: process ports of windows host
+  hosts: "{{ host_names }}"
+  gather_facts: false
+  tasks:
+   - name: finding process ports
+     win_shell: netstat -n
+     register: process_ports
+   - name: displaying process ports
+     debug:
+       msg: "{{ process_ports.stdout_lines }}"

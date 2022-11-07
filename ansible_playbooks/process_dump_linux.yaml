@@ -1,0 +1,26 @@
+---
+- name: process dump from windows host
+  hosts: "{{ host_names }}"
+  gather_facts: false
+  become: yes
+  tasks:
+   - name: creating process dump of a process on linux host
+     shell: python3 memdump.py {{ process_id }} {{ file_name }}
+     register: dump
+     
+   - name: output
+     debug:
+       msg: "{{ dump.stdout_lines[-1] }}"
+       
+   - name: extracting dump file name
+     set_fact:
+       dump_file_name: '{{ dump.stdout_lines[-1][21:] | regex_search("[A-Z].*.dump", ignorecase=True) }}'
+       
+   - name: output
+     debug:
+       msg: "{{ dump_file_name }}"
+       
+   - name: fetching dump file from linux host
+     fetch:
+       src: '/home/{{ host_names }}/{{ dump_file_name }}'
+       dest: "linux_dump/"

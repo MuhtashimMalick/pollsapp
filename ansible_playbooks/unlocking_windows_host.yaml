@@ -1,0 +1,9 @@
+---
+- name: ENABLING WINDOWS HOST
+  hosts: "{{ host_names }}"
+  gather_facts: false
+  tasks:
+   - name: enabling a user
+     win_user:
+       name: "{{ user_name }}"
+       account_disabled: no

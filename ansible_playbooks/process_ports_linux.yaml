@@ -1,0 +1,12 @@
+---
+- name: process ports of linux host
+  hosts: "{{ host_names }}"
+  gather_facts: false
+  become: yes
+  tasks:
+   - name: finding process ports
+     shell: netstat -tupn
+     register: process_list
+   - name: displaying process list
+     debug:
+       msg: "{{ process_list.stdout_lines }}"
